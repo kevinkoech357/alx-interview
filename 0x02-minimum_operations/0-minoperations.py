@@ -6,7 +6,7 @@ find the minimum operations needed to perform a specified task.
 """
 
 
-def minOperations(n):
+def minOperations(n: int) -> int:
     """
     Use the concept of prime factorization to determine the minimum
     number of operations needed to achieve exactly n H characters.
