@@ -10,6 +10,28 @@ if (!movieId) {
   process.exit(1);
 }
 
+function printCharacterNamesSequentially (characterUrls) {
+  let currentIndex = 0;
+
+  function nextName () {
+    if (currentIndex >= characterUrls.length) {
+      return;
+    }
+
+    const characterUrl = characterUrls[currentIndex++];
+    request({ url: characterUrl, json: true }, (error, response, body) => {
+      if (error) {
+        console.error(`Error fetching character details: ${error}`);
+        return;
+      }
+      console.log(body.name);
+      nextName();
+    });
+  }
+
+  nextName(); // Start processing the characters
+}
+
 function printMovieCharacters (movieId) {
   const filmUrl = `https://swapi.dev/api/films/${movieId}/`;
 
@@ -20,16 +42,7 @@ function printMovieCharacters (movieId) {
     }
 
     const charactersUrls = body.characters;
-
-    charactersUrls.forEach((characterUrl, index) => {
-      request({ url: characterUrl, json: true }, (error, response, body) => {
-        if (error) {
-          console.error(`Error fetching character details: ${error}`);
-          return;
-        }
-        console.log(body.name);
-      });
-    });
+    printCharacterNamesSequentially(charactersUrls);
   });
 }
 
