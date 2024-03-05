@@ -6,10 +6,7 @@ of the island described in grid.
 """
 
 
-from typing import List
-
-
-def island_perimeter(grid: List[int]) -> int:
+def island_perimeter(grid):
     """
     0 represents water
     1 represents land
