@@ -11,6 +11,9 @@ def isWinner(x, nums):
     Return name of the winner.
     """
 
+    if not nums or x < 1:
+        return None
+
     def generate_primes(n):
         primes = [True] * (n + 1)
         primes[0], primes[1] = False, False
