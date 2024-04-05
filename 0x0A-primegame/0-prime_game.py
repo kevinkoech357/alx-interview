@@ -26,7 +26,8 @@ def isWinner(x, nums):
     prime_indices = [i for i, value in enumerate(is_prime) if value]
 
     maria_wins = sum(
-        1 for num in nums if num < len(prime_indices) and prime_indices[num] % 2 == 1
+        1 for num in nums if num < len(prime_indices) \
+            and prime_indices[num] % 2 == 1
     )
 
     if maria_wins * 2 == len(nums):
