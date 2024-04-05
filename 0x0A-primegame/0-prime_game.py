@@ -7,45 +7,46 @@ removing prime nums and their multiples.
 
 
 def isWinner(x, nums):
-    """
-    Return name of the winner.
-    """
+    maria_wins = 0
+    ben_wins = 0
 
-    if not nums or x < 1:
-        return None
-
-    def generate_primes(n):
+    for n in nums:
         primes = [True] * (n + 1)
-        primes[0], primes[1] = False, False
+        primes[0] = primes[1] = False
+
         for i in range(2, int(n**0.5) + 1):
             if primes[i]:
                 for j in range(i * i, n + 1, i):
                     primes[j] = False
-        return [i for i in range(2, n + 1) if primes[i]]
 
-    # Function to determine the winner for each round
-    def determine_winner(n):
-        primes = generate_primes(n)
-        if not primes:
-            return "Ben"
-        if n in primes:
-            return "Maria" if len(primes) % 2 == 0 else "Ben"
-        return "Maria"
+        remaining = [i for i in range(2, n + 1) if primes[i]]
 
-    # Count the number of wins for each player
-    maria_wins = 0
-    ben_wins = 0
-    for n in nums:
-        winner = determine_winner(n)
-        if winner == "Maria":
-            maria_wins += 1
-        else:
+        if not remaining:
             ben_wins += 1
+        else:
+            player = True
+            while remaining:
+                if player:
+                    prime = remaining[0]
+                    for i in range(prime, n + 1, prime):
+                        if i in remaining:
+                            remaining.remove(i)
+                    player = False
+                else:
+                    if not remaining:
+                        maria_wins += 1
+                        break
+                    prime = remaining[0]
+                    for i in range(prime, n + 1, prime):
+                        if i in remaining:
+                            remaining.remove(i)
+                    player = True
+            if not player:
+                ben_wins += 1
 
-    # Determine the overall winner
-    if maria_wins == ben_wins:
-        return None
-    elif maria_wins > ben_wins:
+    if maria_wins > ben_wins:
         return "Maria"
-    else:
+    elif ben_wins > maria_wins:
         return "Ben"
+    else:
+        return None
