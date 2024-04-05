@@ -7,46 +7,31 @@ removing prime nums and their multiples.
 
 
 def isWinner(x, nums):
-    maria_wins = 0
-    ben_wins = 0
+    """
+    Returns name of the winner
+    """
 
-    for n in nums:
-        primes = [True] * (n + 1)
-        primes[0] = primes[1] = False
-
-        for i in range(2, int(n**0.5) + 1):
-            if primes[i]:
-                for j in range(i * i, n + 1, i):
-                    primes[j] = False
-
-        remaining = [i for i in range(2, n + 1) if primes[i]]
-
-        if not remaining:
-            ben_wins += 1
-        else:
-            player = True
-            while remaining:
-                if player:
-                    prime = remaining[0]
-                    for i in range(prime, n + 1, prime):
-                        if i in remaining:
-                            remaining.remove(i)
-                    player = False
-                else:
-                    if not remaining:
-                        maria_wins += 1
-                        break
-                    prime = remaining[0]
-                    for i in range(prime, n + 1, prime):
-                        if i in remaining:
-                            remaining.remove(i)
-                    player = True
-            if not player:
-                ben_wins += 1
-
-    if maria_wins > ben_wins:
-        return "Maria"
-    elif ben_wins > maria_wins:
-        return "Ben"
-    else:
+    if not nums or x < 1:
         return None
+
+    max_num = max(nums)
+    is_prime = [True] * (max_num + 1)
+    is_prime[0] = is_prime[1] = False
+
+    for i in range(2, int(max_num**0.5) + 1):
+        if is_prime[i]:
+            for j in range(i * i, max_num + 1, i):
+                is_prime[j] = False
+
+    prime_indices = [i for i, value in enumerate(is_prime) if value]
+
+    maria_wins = sum(
+        1 for num in nums if num < len(prime_indices) and prime_indices[num] % 2 == 1
+    )
+
+    if maria_wins * 2 == len(nums):
+        return None
+    elif maria_wins * 2 > len(nums):
+        return "Maria"
+    else:
+        return "Ben"
